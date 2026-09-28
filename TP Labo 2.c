@@ -230,6 +230,14 @@ int ingresoID() {
     return atoi(id);
 }
 
+// Reemplaza a gets(): lee una línea con espacios sin pasarse del tamaño del buffer
+// y le quita el '\n' final. Si no hay nada para leer, deja el buffer como estaba.
+void leerLinea(char texto[], int tamanio){
+    if (fgets(texto, tamanio, stdin) != NULL){
+        texto[strcspn(texto, "\n")] = '\0';
+    }
+}
+
 // Pide al usuario una opción entre tipos de moneda
 // si es una opción válida, devuelve el caracter ingresado
 // si no, pide un ingreso nuevamente.
@@ -314,22 +322,22 @@ void altaPropiedad(FILE* propiedades){
     strcpy(nuevo.fecha_ingreso, fecha);
 
     printf ("Ingrese la zona de la propiedad: ");
-    gets(letra);
+    leerLinea(letra, sizeof(letra));
     fflush(stdin);
     while (!validarTexto(letra)){
         printf("Opci%cn inv%clida. Por favor, ingrese una zona v%clida: ", 162,160, 160);
-        gets(letra);
+        leerLinea(letra, sizeof(letra));
         fflush(stdin);
     }
     validarMayus(letra);
     strcpy(nuevo.zona, letra);
 
     printf ("Ingrese la ciudad/barrio de la propiedad: ");
-    gets(letra);
+    leerLinea(letra, sizeof(letra));
     fflush(stdin);
     while (!validarTexto(letra)){
         printf("Opci%cn inv%clida. Por favor, ingrese una ciudad/barrio v%clida: ", 162,160, 160);
-        gets(letra);
+        leerLinea(letra, sizeof(letra));
         fflush(stdin);
     }
     validarMayus(letra);
@@ -557,10 +565,10 @@ void modificarPropiedad(FILE* propiedades){
             switch (opcion){
             case 'a':
                 printf ("Ingrese la nueva ciudad/barrio de la propiedad: ");
-                gets(letra);
+                leerLinea(letra, sizeof(letra));
                 while (!validarTexto(letra)){
                     printf("Opci%cn inv%clida. Por favor, ingrese una ciudad/barrio v%clida: ", 162,160, 160);
-                    gets(letra);
+                    leerLinea(letra, sizeof(letra));
                 }
                 validarMayus(letra);
                 strcpy(prop.ciudad_barrio, letra);
