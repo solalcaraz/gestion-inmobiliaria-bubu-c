@@ -1,0 +1,6 @@
+# Binarios compilados
+*.exe
+*.o
+
+# Archivos que genera el programa al hacer la baja física
+*.xyz
