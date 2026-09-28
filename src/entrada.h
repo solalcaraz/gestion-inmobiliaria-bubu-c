@@ -3,6 +3,8 @@
 #ifndef ENTRADA_H
 #define ENTRADA_H
 
+// Los acentos de todos los mensajes van como escapes (\xa2 = ó, \xa0 = á, ...) porque la consola
+// de Windows en español usa la página de códigos 850, no UTF-8.
 #define MSG_OPCION_INVALIDA "Opci\xa2n inv\xa0lida. Int\x82ntelo de nuevo.\n"
 
 // Reemplazo seguro de gets(): no se pasa del tamaño del buffer y quita el '\n' final.

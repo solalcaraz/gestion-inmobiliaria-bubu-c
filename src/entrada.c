@@ -22,7 +22,7 @@ char elegirOpcion(const char *menu, const char *validas, const char *error){
     scanf(" %c", &opcion);
     fflush(stdin);
     opcion = tolower(opcion);
-    while (strchr(validas, opcion) == NULL){
+    while (opcion == '\0' || strchr(validas, opcion) == NULL){
         printf("%s", error);
         scanf(" %c", &opcion);
         fflush(stdin);
