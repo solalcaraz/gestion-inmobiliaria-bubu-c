@@ -700,8 +700,7 @@ void listarXyz(){
 //crea un archivo "propiedades_bajas_<fecha>.xyz" con la fecha actual.
 //en este graba todas las propiedades inactivas de "propiedades"
 //simultaneamente elimina esos registros de "propiedades"
-//devuelve un puntero activo al archivo de bajas.
-FILE* bajaFisica(FILE* propiedades) {
+void bajaFisica(FILE* propiedades) {
     FILE* pArchivoBajas;
     int nReg;
     propiedad_t busqueda;
@@ -736,8 +735,6 @@ int main(){
     printf("%cBienvenido a Inmobiliaria Bub%c!\n", 173, 163);
     FILE* propiedades = crearDat();
     fflush(stdin);
-    char nombreBaja[40];
-    FILE* bajasXyz = NULL;
     while(1){
         mostrarMenu();
         fflush(stdin);
@@ -760,16 +757,12 @@ int main(){
                 bajaLogica(propiedades);
                 break;
             case 'f':
-                bajasXyz = bajaFisica(propiedades);
+                bajaFisica(propiedades);
                 break;
             case 'g':
                 listarXyz();
                 break;
             case 'h':
-            //cerrar el archivo y salir del programa
-                if (bajasXyz){
-                    fclose(bajasXyz);
-                }
                 fclose (propiedades);
                 printf("Gracias por confiar en Inmobiliaria Bub%c. Saliendo del programa...\n",163);
                 exit(0);
