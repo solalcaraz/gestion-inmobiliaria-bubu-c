@@ -328,6 +328,9 @@ void bajaFisica(FILE *propiedades){
                     prop.tipo_propiedad, prop.operacion, prop.fecha_salida, prop.flag_activo);
             fseek(propiedades, -(long)sizeof(propiedad_t), SEEK_CUR);
             fwrite(&REGISTRO_VACIO, sizeof(propiedad_t), 1, propiedades);
+            // En C no se puede pasar de escribir a leer un archivo sin un fseek en el medio:
+            // sin esto el próximo fread lee cualquier cosa y los registros se pisan.
+            fseek(propiedades, 0, SEEK_CUR);
         }
     }
     printf("Baja f\xa1sica realizada con exito.\n");
