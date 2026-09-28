@@ -147,7 +147,7 @@ void listarDat(FILE* propiedades){
         case 'c': //un tipo de propiedad
             op = elegirPropiedad();
             imprimirEncabezado();
-            for (int i = 0; i <= total; i++){
+            for (int i = 0; i < total; i++){
                 fseek(propiedades, i*sizeof(propiedad_t), SEEK_SET);
                 fread(&prop, sizeof(propiedad_t),1, propiedades);
                 if (strcmp(prop.tipo_propiedad, "Casa") == 0 && op == 'c'){
