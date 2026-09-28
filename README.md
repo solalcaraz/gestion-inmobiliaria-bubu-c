@@ -77,23 +77,13 @@ Las fechas se guardan como texto y, para filtrar por rango, se convierten al ent
 
 ## Cómo correrlo
 
-Necesitás Windows y gcc de [MinGW-w64](https://winlibs.com/) **enlazado con MSVCRT**. Sirve, por ejemplo, la variante "MSVCRT runtime" de WinLibs o el MinGW que viene con Code::Blocks.
-
-```sh
-gcc -Wall -Wextra -o inmobiliaria.exe src/*.c
-inmobiliaria.exe
-```
-
 Corrélo desde la raíz del repo. Al arrancar pregunta si querés crear un archivo nuevo: con **N** abre el `propiedades.dat` de ejemplo y con **S** empieza con uno vacío (y borra los datos de ejemplo).
-
-> **¿Por qué MSVCRT?** El programa usa `fflush(stdin)` para descartar lo que sobra de cada respuesta. Eso no es C estándar: en `msvcrt.dll` vacía el buffer del teclado, pero en el runtime más nuevo de Windows (UCRT) y en Linux no hace nada. Compilado con UCRT, el programa funciona, pero después de cada operación muestra un "Opción inválida" de más.
 
 ## Qué aprendí y qué mejoraría
 
 **Qué aprendí**
 
 - A trabajar con archivos binarios de acceso directo y a pensar el diseño alrededor de eso: IDs como posiciones, registros vacíos y la diferencia entre baja lógica y baja física.
-- Que C tiene reglas que no avisan cuando se rompen. La baja física hacía un `fread` justo después de un `fwrite` sin un `fseek` en el medio, algo que el estándar no permite. El programa no daba error, pero pisaba registros. Lo encontré al pulir el proyecto, probándolo con datos nuevos.
 - A no dar por hecho que un cambio "no cambia nada". Para reorganizar el código armé escenarios que recorren todo el menú. Comparé la salida y los archivos resultantes del programa original contra la versión nueva, corriendo ambos en una consola real, y así confirmé que la reestructuración no cambió el comportamiento.
 - Fue mi primer proyecto en equipo con Git: ramas por integrante, merges y resolución de conflictos.
 
@@ -103,8 +93,6 @@ Corrélo desde la raíz del repo. Al arrancar pregunta si querés crear un archi
 - **Baja lógica:** no carga la fecha de salida con la fecha del día, aunque la consigna lo pedía.
 - **Archivo de bajas:** el nombre sale con espacios (`propiedades_bajas_ 1 92026.xyz`). Con `%02d` quedaría `01092026`.
 - **Listar bajas:** si todavía no se hizo ninguna baja física en el día, el programa se cierra en lugar de avisar.
-- **Portabilidad:** reemplazaría `fflush(stdin)` por leer siempre la línea completa con `fgets`. Así funcionaría igual en cualquier sistema.
-- **Formato del archivo:** el struct se guarda tal como está en memoria, así que un `.dat` creado con un compilador podría no leerse bien con otro. Con más tiempo, serializaría campo por campo.
 
 ## Autoría
 
@@ -126,7 +114,6 @@ Este proyecto es un fork de **[dampal/TP_Archivos](https://github.com/dampal/TP_
   - El listado por tipo repetía la última propiedad.
   - `bajaFisica` devolvía un puntero indefinido al que después se le hacía `fclose`.
   - `gets()` podía desbordar el buffer con textos largos.
-- Separé el programa, que era un único archivo de casi 800 líneas, en módulos con responsabilidades claras. Unifiqué los ~15 bucles de "pedir y validar" que estaban copiados y eliminé código muerto y comentarios que remitían a la consigna.
-- Hice que compile sin warnings con gcc actual (`-Wall -Wextra`). Antes no compilaba por includes faltantes.
+- Separé el programa, que era un único archivo de casi 800 líneas, en módulos con responsabilidades claras. La parte de pedir un dato y validarlo estaba copiada campo por campo, así que la pasé a unas pocas funciones que se reutilizan. También eliminé código muerto y comentarios que remitían a la consigna.
 - Saqué el ejecutable del repositorio y reemplacé los datos de ejemplo por propiedades realistas.
 - Escribí este README y generé las capturas de la demo.
